@@ -1,40 +1,23 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import clientPromise from "@/lib/db";
-import { ObjectId } from "mongodb";
+// app/api/patients/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import prisma from "@/lib/db";
 
-type Patient = {
-  _id?: ObjectId;
-  name: string;
-  symptoms: string;
-  status: string;
-  createdAt: Date;
-};
+export async function GET(req: NextRequest) {
+  const patients = await prisma.patient.findMany({ orderBy: { createdAt: "asc" } });
+  return NextResponse.json(patients);
+}
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const client = await clientPromise;
-  const db = client.db("smart-triage");
-  const collection = db.collection<Patient>("patients");
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  const { name, age, symptoms } = body;
 
-  if (req.method === "POST") {
-    const { name, symptoms } = req.body;
-    if (!name || !symptoms) return res.status(400).json({ message: "Name and symptoms required" });
-
-    await collection.insertOne({ name, symptoms, status: "waiting", createdAt: new Date() });
-    return res.status(201).json({ message: "Patient added" });
+  if (!name || !age || !symptoms) {
+    return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
   }
 
-  if (req.method === "GET") {
-    const patients = await collection.find().sort({ createdAt: 1 }).toArray();
-    return res.status(200).json(patients);
-  }
+  const newPatient = await prisma.patient.create({
+    data: { name, age: Number(age), symptoms },
+  });
 
-  if (req.method === "PUT") {
-    const { id, status } = req.body;
-    if (!id || !status) return res.status(400).json({ message: "ID and status required" });
-
-    await collection.updateOne({ _id: new ObjectId(id) }, { $set: { status } });
-    return res.status(200).json({ message: "Status updated" });
-  }
-
-  res.status(405).json({ message: "Method not allowed" });
+  return NextResponse.json(newPatient, { status: 201 });
 }

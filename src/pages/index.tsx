@@ -1,10 +1,15 @@
-import PatientForm from "@/components/PatientForm";
+// src/pages/index.tsx
+import PatientForm from "../components/PatientForm";
+import QueueList from "../components/QueueList";
+import { useState } from "react";
 
 export default function Home() {
+  const [refreshQueue, setRefreshQueue] = useState(false);
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-      <h1 className="text-3xl font-bold mb-6">Patient Check-In</h1>
-      <PatientForm onSubmit={() => {}} />
-    </div>
+    <main className="min-h-screen bg-gray-100 flex flex-col items-center pt-10 pb-10">
+      <PatientForm onPatientAdded={() => setRefreshQueue((prev) => !prev)} />
+      <QueueList key={refreshQueue ? "refresh1" : "refresh2"} />
+    </main>
   );
 }

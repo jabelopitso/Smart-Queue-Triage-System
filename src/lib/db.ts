@@ -1,24 +1,13 @@
-import { MongoClient } from "mongodb";
+import { PrismaClient } from "@prisma/client";
 
-let client;
-let clientPromise: Promise<MongoClient>;
+const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
-if (!process.env.MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI in .env.local");
-}
+export const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    log: ["query", "info", "warn", "error"],
+  });
 
-const uri = process.env.MONGODB_URI;
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
-if (process.env.NODE_ENV === "development") {
-  // Use global to avoid multiple connections in dev
-  if (!global._mongoClientPromise) {
-    client = new MongoClient(uri);
-    global._mongoClientPromise = client.connect();
-  }
-  clientPromise = global._mongoClientPromise;
-} else {
-  client = new MongoClient(uri);
-  clientPromise = client.connect();
-}
-
-export default clientPromise;
+export default prisma;
