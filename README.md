@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🏥 Smart Queue Triage System
 
-## Getting Started
+A modern patient queue management system built with Next.js, TypeScript, TailwindCSS, and Prisma.
+Easily add patients, view a live queue, and manage triage efficiently. Perfect for clinics, hospitals, or triage centers.
 
-First, run the development server:
+✨ Features
 
-```bash
+Add Patients: Quickly register name, age, and symptoms.
+
+Live Queue: Auto-refreshing patient queue every 5 seconds.
+
+Clear Queue: Reset the queue with a single click.
+
+Responsive Design: Works seamlessly on mobile and desktop.
+
+Modern UI: Gradient cards, styled forms, and clean layouts.
+
+TypeScript + Prisma: Strong typing and easy database integration.
+
+🛠 Tech Stack
+
+Frontend: Next.js (Pages Router), React, TypeScript, TailwindCSS
+
+Backend / API: Next.js API Routes
+
+Database: SQLite (via Prisma ORM)
+
+Styling: TailwindCSS, responsive & gradient designs
+
+🚀 Getting Started
+Prerequisites
+
+Node.js ≥ 18
+
+npm ≥ 9
+
+Installation
+# Clone the repository
+git clone https://github.com/yourusername/Smart-Queue-Triage-System.git
+cd Smart-Queue-Triage-System
+
+# Install dependencies
+npm install
+npm install --save-dev @types/node
+
+DATABASE_URL="file:./dev.db"
+
+# Run migrations and generate Prisma client
+npx prisma migrate dev --name init
+npx prisma generate
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Project Structure
+src/
+├── components/       # PatientForm & QueueList
+├── lib/              # Prisma client (db.ts)
+└── pages/
+    ├── api/          # API routes
+    └── index.tsx     # Homepage
+prisma/
+├── schema.prisma     # Database schema
+public/               # Static assets & images
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Future Enhancements
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Staff Triage Dashboard
 
-## Learn More
+Mark patients as processed
 
-To learn more about Next.js, take a look at the following resources:
+Notifications for next patient
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Multiple clinic and queue support
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+📄 License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT License
